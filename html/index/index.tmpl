@@ -1,0 +1,148 @@
+{{ define "html/index.tmpl" }}
+<!doctype html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Script-Type" content="text/javascript">
+    <meta http-equiv="Content-Style-Type" content="text/css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // Target file extensions
+        function getExtension(fileName) {
+            var ret;
+            if (!fileName) {
+                return ret;
+            }
+            var fileTypes = fileName.split(".");
+            var len = fileTypes.length;
+            if (len === 0) {
+                return ret;
+            }
+            ret = fileTypes[len - 1];
+            return ret;
+        }
+
+        var flag = 0;
+        // Whether the target file is a zip or not
+        function IsTxtFile(fileName) {
+            var Extension = getExtension(fileName);
+            if (Extension.toLowerCase() === "zip") {
+                flag++;
+            }
+            else {
+                alert("It is not a Zip file.");
+            }
+        }
+
+        // After clicking the upload button
+        function DisableButton(b) {
+            b.disabled = true;
+            b.value = 'Submitting';
+            b.form.submit();
+        }
+
+    </script>
+
+    <style type="text/css">
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Meiryo, sans-serif;
+        }
+
+        /* Upload Button*/
+        input.upload_button {
+            font-size: 1.0em;
+            font-weight: bold;
+            padding: 8px 20px;
+            background-color: #03bfc5;
+            color: #fff;
+            border-style: none;
+        }
+
+        /*Upload Button Hover*/
+        input.upload_button:hover {
+            background-color: rgb(80, 208, 247);
+            color: #fff;
+        }
+
+        /*Whole box*/
+        .accbox {
+            margin: 2em 0;
+            padding: 0;
+            max-width: 465px;
+            /*最大幅*/
+        }
+
+        /*Label*/
+        .accbox label {
+            display: block;
+            margin: 1.5px 0;
+            padding: 11px 12px;
+            color: #ffffff;
+            font-weight: bold;
+            background: #bdbdbd;
+            cursor: pointer;
+            transition: all 0.5s;
+        }
+
+        /*When label hover*/
+        .accbox label:hover {
+            background: #dfdfdf;
+        }
+
+        /*Hide checkboxes*/
+        .accbox input {
+            display: none;
+        }
+
+        /*Hide the contents.*/
+        .accbox .accshow {
+            height: 0;
+            padding: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: 0.8s;
+        }
+
+        /*Click to view contents*/
+        .cssacc:checked+.accshow {
+            height: auto;
+            padding: 5px;
+            background: #eaeaea;
+            opacity: 1;
+        }
+    </style>
+
+    <title>{{ .title }}</title>
+</head>
+
+<body>
+    <h1>{{ .title }}</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <input type="file" name="upload" id="elmFile" accept="application/zip" required>
+            <input class="upload_button" type="submit" id="btnUpload" value="upload"
+                onclick="IsTxtFile(document.getElementById('elmFile').value);DisableButton(this);">
+        </div>
+    </form>
+    <p><strong>{{ .downloadMessage }}</strong><a href="results/{{ .downloadfile }}"
+            download="{{ .downloadfile }}">{{ .downloadfile }}</a></p>
+    </br>
+    <div class="accbox">
+        <label for="label1">README</label>
+        <input type="checkbox" id="label1" class="cssacc" />
+        <div class="accshow">
+            <p><strong>REQUIREMENTS</strong></p>
+            <ul>
+                <li>Chrome or Firefox</li>
+				<li>sdlxliff</li>
+            </ul>
+            <p><strong>USAGE</strong></p>
+            <ul>
+                <li>Specify <strong>*.zip</strong> file.</li>
+                <li>Click <strong>[upload]</strong> button.</li>
+                <li>Please download Zip file when the download link comes out.</li>
+            </ul>
+        </div>
+    </div>
+</body>
+{{ end }}
