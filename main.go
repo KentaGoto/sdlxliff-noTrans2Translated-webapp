@@ -79,7 +79,7 @@ func main() {
 			fmt.Println("Delete zip file!")
 		}
 
-		// OCRする
+		// メイン処理
 		if _, err = exec.Command("cmd.exe", "/c", rootDir+"\\"+"sdlxliff-noTrans2Translated.pl", uploadDir).CombinedOutput(); err != nil {
 			fmt.Println("Command exec error: ", err)
 		} else {
